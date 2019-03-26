@@ -1,0 +1,18 @@
+{
+    "name": "hitankar/taxonomy-term-image",
+    "description": "Library for adding an image upload field to taxonomy terms in WordPress",
+    "type": "library",
+    "require": {
+        "php": ">=7.1"
+    },
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Hitankar Ray",
+            "email": "hitankar@gmail.com"
+        }
+    ],
+    "autoload": {
+        "classmap": ["app/"]
+    }
+}

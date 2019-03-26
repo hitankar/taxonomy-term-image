@@ -1,16 +1,9 @@
 <?php
-/*
-Plugin Name: Taxonomy Term Image
-Plugin URI: https://github.com/daggerhart/taxonomy-term-image
-Description: Example plugin for adding an image upload field to a taxonomy term edit page using WordPress 4.4 taxonomy term meta data
-Author: daggerhart, slack
-Version: 2.0.3
-*/
+namespace Hitankar\TaxonomyTermImage;
 
-if ( ! defined( 'ABSPATH' ) ) { exit; }
-
-if ( ! class_exists( 'Taxonomy_Term_Image' ) ) :
-
+/**
+ * Class to manage Term Image functionality
+ */
 class Taxonomy_Term_Image {
 
 	// object version used for enqueuing scripts
@@ -40,10 +33,13 @@ class Taxonomy_Term_Image {
 	 *
 	 * @return Taxonomy_Term_Image object
 	 */
-	static function instance() {
+	static function instance(array $taxonomies) {
+        if ( !is_array($taxonomies) || count($taxonomies) <= 0 )
+            throw new Exception("Array of taxonomies expected. Example array('category', ... )");
+        
 		static $object = null;
 		if ( is_null( $object ) ) {
-			$object = new Taxonomy_Term_Image();
+			$object = new Taxonomy_Term_Image($taxonomies);
 		}
 		return $object;
 	}
@@ -57,7 +53,7 @@ class Taxonomy_Term_Image {
 	/**
 	 * Init the plugin and hook into WordPress
 	 */
-	private function __construct() {
+	private function __construct($taxonomies) {
 		// default labels
 		$this->labels = array(
 			'fieldTitle'       => __( 'Taxonomy Term Image' ),
@@ -73,7 +69,7 @@ class Taxonomy_Term_Image {
 		$this->labels = apply_filters( 'taxonomy-term-image-labels', $this->labels );
 
 		// allow overriding of the target taxonomies
-		$this->taxonomies = apply_filters( 'taxonomy-term-image-taxonomy', $this->taxonomies );
+		$this->taxonomies = apply_filters( 'taxonomy-term-image-taxonomy', $taxonomies );
 
 		if ( ! is_array( $this->taxonomies ) ) {
 			$this->taxonomies = array( $this->taxonomies );
@@ -88,7 +84,7 @@ class Taxonomy_Term_Image {
 		$this->term_meta_key = apply_filters( 'taxonomy-term-image-meta-key', $this->term_meta_key );
 
 		// get our js location for enqueing scripts
-		$this->js_dir_url = apply_filters( 'taxonomy-term-image-js-dir-url', plugin_dir_url( __FILE__ ) . '/js' );
+		$this->js_dir_url = apply_filters( 'taxonomy-term-image-scripts-dir-url', plugin_dir_url( __FILE__ ) . '/js' );
 
 		// check for updates
 		$this->upgrade();
@@ -345,14 +341,3 @@ class Taxonomy_Term_Image {
 		}
 	}
 }
-
-endif;
-
-/**
- * Initialize the plugin by calling for its instance on WordPress action 'init'
- */
-function taxonomy_term_image_init() {
-	Taxonomy_Term_Image::instance();
-}
-add_action( 'init', 'taxonomy_term_image_init' );
-
