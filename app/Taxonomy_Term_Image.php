@@ -7,7 +7,7 @@ namespace Hitankar\TaxonomyTermImage;
 class Taxonomy_Term_Image {
 
 	// object version used for enqueuing scripts
-	private $version = '2.0.3';
+	private $version = '3.0.0';
 
 	// url for the directory where our js is located
 	private $js_dir_url;

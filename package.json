@@ -1,6 +1,6 @@
 {
   "name": "taxonomy-term-image",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "Library for adding an image upload field to taxonomy terms in WordPress",
   "main": "resources/assets/scripts/taxonomy-term-image.js",
   "scripts": {
