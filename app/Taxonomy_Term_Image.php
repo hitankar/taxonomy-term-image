@@ -234,10 +234,18 @@ class Taxonomy_Term_Image {
 				// WP core stuff we need
 				wp_enqueue_media();
 				wp_enqueue_style( 'thickbox' );
+				
+				// check if App\asset_path exists
+				// @todo need to test if this condition works when installed as plugin
+				if(function_exists('\\App\\asset_path')) {
+					// register our custom script
+					wp_register_script( 'taxonomy-term-image-js', \App\asset_path('scripts/taxonomy-term-image.js'), array( 'jquery', 'thickbox', 'media-upload' ), $this->version, true );
 
-				// register our custom script
-				wp_register_script( 'taxonomy-term-image-js', $this->js_dir_url . '/taxonomy-term-image.js', array( 'jquery', 'thickbox', 'media-upload' ), $this->version, true );
-
+				} else {
+					// register our custom script
+					wp_register_script( 'taxonomy-term-image-js', $this->js_dir_url . '/taxonomy-term-image.js', array( 'jquery', 'thickbox', 'media-upload' ), $this->version, true );
+				}
+				
 				// Localize the modal window text so it can be translated
 				wp_localize_script( 'taxonomy-term-image-js', 'TaxonomyTermImageText', $this->labels );
 
